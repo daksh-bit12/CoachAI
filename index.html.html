@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoachAI - Tactical Training Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Premium Fonts: Space Grotesk for headers, Inter for readability -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Utility Drawer -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-area">
+                    <span class="pitch-badge">ACTIVE SQUAD</span>
+                    <h2>COACH<span>AI</span></h2>
+                </div>
+                <p>Tactical Performance Intelligence</p>
+            </div>
+            
+            <div class="config-section">
+                <div class="system-badge">
+                    <div class="badge-dot"></div>
+                    <div>
+                        <strong>Engine</strong>
+                        <p>Gemini 2.5 Flash</p>
+                    </div>
+                </div>
+                <p class="help-text">This assistant connects securely to serverless routines to protect training logs and host keys.</p>
+            </div>
+
+            <div class="stats-card">
+                <div class="stat-item">
+                    <span class="stat-val">READY</span>
+                    <span class="stat-lbl">Tactical Core</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-val">98%</span>
+                    <span class="stat-lbl">Sharpness</span>
+                </div>
+            </div>
+
+            <div class="sidebar-footer">
+                <button id="clear-btn" class="secondary-btn">Reset Session</button>
+            </div>
+        </aside>
+
+        <!-- Main Chat Area -->
+        <main class="chat-area">
+            <header class="chat-header">
+                <button id="menu-toggle" class="menu-btn">☰</button>
+                <div class="coach-profile">
+                    <div class="avatar-pulse">
+                        <span class="avatar-icon">⚽</span>
+                        <span class="pulse-ring"></span>
+                    </div>
+                    <div>
+                        <h3>CoachAI</h3>
+                        <span class="status">Tactical Core Active</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Conversation Space -->
+            <div class="messages-container" id="messages-container">
+                <!-- Chat messages loaded here -->
+            </div>
+
+            <!-- Quick Suggestions Box -->
+            <div class="suggestions-box" id="suggestions-box">
+                <button class="suggestion-chip" data-prompt="Design an explosive stamina drill for a winger.">🏃 Stamina Drill</button>
+                <button class="suggestion-chip" data-prompt="What are the tactical pros and cons of playing a 4-3-3 formation?">📐 4-3-3 Tactics</button>
+                <button class="suggestion-chip" data-prompt="Give me a 10-minute warm-up routine before a high-intensity match.">🔥 Warm-up Routine</button>
+            </div>
+
+            <!-- Text Input Container -->
+            <div class="input-bar">
+                <form class="input-form" id="chat-form">
+                    <input type="text" id="user-input" placeholder="Type tactical questions or training requests..." required autocomplete="off">
+                    <button type="submit" id="send-btn">
+                        <span>Send</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </button>
+                </form>
+            </div>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
