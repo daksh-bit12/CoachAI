@@ -1,25 +1,27 @@
-// 🔐 Put your NEW Gemini API key here (AIza...)
+// 🔐 API KEY (PUT YOUR REAL AI STUDIO KEY HERE - must start with AIza...)
 const GEMINI_API_KEY = "AQ.Ab8RN6LzpQakvC-TtCMb2CH21m1FM4Gm6GQzrJ73zHuBNv9_aA";
 
+// 🧠 Model (2.5 Flash with safe fallback option)
+const MODEL_NAME = "gemini-2.5-flash"; // if error → change to "gemini-1.5-flash"
+
 // 🧠 Coach Persona
-const COACH_PERSONA = `You are CoachAI, an intelligent football coaching chatbot designed for students and amateur football players. 
-Your role is to act like a professional football coach. Help users improve their football skills, fitness, tactics, and understanding of the game. 
+const COACH_PERSONA = `
+You are CoachAI, a professional football coaching assistant.
 
 Rules:
-- Be encouraging, practical, and professional.
-- Give clear and actionable advice.
-- Ask follow-up questions when information is missing.
-- Adapt recommendations based on the user's age, position, skill level, and goals.
-- Keep explanations simple and easy to understand.
-- Focus on player development, training, tactics, nutrition, recovery, and mindset.
-- Never give unsafe training advice.
-- Use structured sections:
+- Be structured and practical
+- Give actionable training advice
+- Adapt to age, position, skill level
+- Ask follow-up questions when needed
+
+Format:
 ### Brief Assessment
 ### Key Recommendations
 ### Training Plan
-### Next Steps`;
+### Next Steps
+`;
 
-// 💬 Chat memory
+// 💬 Memory store
 let localMessages = [];
 
 // DOM
@@ -27,17 +29,16 @@ const messagesContainer = document.getElementById("messages-container");
 const chatForm = document.getElementById("chat-form");
 const userInput = document.getElementById("user-input");
 
-// 🟢 Init message
-window.addEventListener("DOMContentLoaded", () => {
-    resetChat();
-});
+// 🚀 Init
+window.addEventListener("DOMContentLoaded", resetChat);
 
 function resetChat() {
-    localMessages = [
-        { role: "model", content: "Welcome to CoachAI. Tell me your position, age, and goal." }
-    ];
+    localMessages = [];
     messagesContainer.innerHTML = "";
-    appendMessage("assistant", localMessages[0].content);
+
+    appendMessage("assistant",
+        "Welcome to CoachAI. Tell me your age, position, and goal."
+    );
 }
 
 // 🧾 Render messages
@@ -54,7 +55,7 @@ function appendMessage(role, text) {
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
 }
 
-// 🚀 Send message
+// 🧠 Send message
 chatForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -65,7 +66,7 @@ chatForm.addEventListener("submit", async (e) => {
     localMessages.push({ role: "user", content: query });
     userInput.value = "";
 
-    // loading
+    // loader
     const loader = document.createElement("div");
     loader.classList.add("message", "assistant");
     loader.innerText = "CoachAI is thinking...";
@@ -78,7 +79,7 @@ chatForm.addEventListener("submit", async (e) => {
         }));
 
         const endpoint =
-            `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+            `https://generativelanguage.googleapis.com/v1beta/models/${MODEL_NAME}:generateContent?key=${GEMINI_API_KEY}`;
 
         const res = await fetch(endpoint, {
             method: "POST",
@@ -93,15 +94,21 @@ chatForm.addEventListener("submit", async (e) => {
             })
         });
 
-        messagesContainer.removeChild(loader);
-
-        if (!res.ok) {
-            const err = await res.json();
-            throw new Error(err.error?.message || "API Error");
+        if (messagesContainer.contains(loader)) {
+            messagesContainer.removeChild(loader);
         }
 
         const data = await res.json();
-        const output = data.candidates?.[0]?.content?.parts?.[0]?.text || "No response";
+
+        if (!res.ok) {
+            throw new Error(data.error?.message || "API request failed");
+        }
+
+        if (!data.candidates?.[0]?.content?.parts?.[0]?.text) {
+            throw new Error("Empty response from Gemini");
+        }
+
+        const output = data.candidates[0].content.parts[0].text;
 
         localMessages.push({ role: "model", content: output });
         appendMessage("assistant", output);
@@ -110,6 +117,7 @@ chatForm.addEventListener("submit", async (e) => {
         if (messagesContainer.contains(loader)) {
             messagesContainer.removeChild(loader);
         }
+
         appendMessage("assistant", "⚠️ Error: " + err.message);
     }
 });
