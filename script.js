@@ -1,5 +1,5 @@
 // 🔐 API KEY (PUT YOUR REAL AI STUDIO KEY HERE - must start with AIza...)
-const GEMINI_API_KEY = "AQ.Ab8RN6LzpQakvC-TtCMb2CH21m1FM4Gm6GQzrJ73zHuBNv9_aA";
+const GEMINI_API_KEY = "AQ.Ab8RN6IuhG7suEk6z5PiosSeJ0HroHk_6aDpAxuwlmrj2l7-vw";
 
 // 🧠 Model (2.5 Flash with safe fallback option)
 const MODEL_NAME = "gemini-2.5-flash"; // if error → change to "gemini-1.5-flash"
